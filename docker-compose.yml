@@ -1,0 +1,19 @@
+version: "3"
+services:
+  backend:
+    image: lifi_back:1.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+#    restart: always
+    ports:
+      - "80:80"
+    environment:
+      FLASK_ENV: development
+    # logging:
+      # driver: awslogs
+      # options:
+        # awslogs-region: us-east-2
+        # awslogs-group: agent_007
+        # awslogs-create-group: 'true'
+        # awslogs-stream: backend_logs
