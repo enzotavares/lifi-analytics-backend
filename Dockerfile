@@ -1,21 +1,28 @@
-FROM python:3.9-slim-buster
+FROM tiangolo/uwsgi-nginx:python3.9
 
-RUN apt update -y && \
-    apt install -y python3-pip
+LABEL maintainer="Akshay <akshay@li.finance>"
 
-ENV TZ=UTC
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-# We copy just the requirements.txt first to leverage Docker cache
-COPY ./requirements.txt /app/requirements.txt
-
-WORKDIR /app
+# Install requirements
+COPY app/requirements.txt /tmp/requirements.txt
 RUN pip install --pre gql[all]
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
-COPY . /app
+# Add demo app
+COPY ./app /app
+WORKDIR /app
 
-RUN chmod u+x ./entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
-# ENTRYPOINT [ "python" ]
+# Make /app/* available to be imported by Python globally to better support several use cases like Alembic migrations.
+ENV PYTHONPATH=/app
 
-# CMD [ "app.py" ]
+# Move the base entrypoint to reuse it
+RUN mv /entrypoint.sh /uwsgi-nginx-entrypoint.sh
+# Copy the entrypoint that will generate Nginx additional configs
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Run the start script provided by the parent image tiangolo/uwsgi-nginx.
+# It will check for an /app/prestart.sh script (e.g. for migrations)
+# And then will start Supervisor, which in turn will start Nginx and uWSGI
+CMD ["/start.sh"]
