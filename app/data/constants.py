@@ -9,44 +9,21 @@ last_blocs = {
     "Arbitrum": "244433",
 }
 
-last_blocs_old = {
-    "Polygon": "19412478",
-    "BSC": "11159019",
-    "Fantom": "17528234",
-    "xDai": "18228753",
-    "Arbitrum": "13274990",
-}
-
 txn_columns = [
     "amount",
-    "bidSignature",
-    "callDataHash",
-    "callTo",
-    "cancelCaller",
-    "cancelTransactionHash",
     "chainId",
     "expiry",
-    "fulfillCaller",
     "fulfillTimestamp",
-    "fulfillTransactionHash",
     "id",
-    "prepareCaller",
-    "prepareTransactionHash",
     "preparedBlockNumber",
     "preparedTimestamp",
-    "receivingAddress",
     "receivingAssetId",
     "receivingChainId",
-    "receivingChainTxManagerAddress",
-    "router",
     "sendingAssetId",
-    "sendingChainFallback",
     "sendingChainId",
     "status",
-    "transactionId",
     "user",
 ]
-
 
 # Provide a GraphQL query
 txns_query = gql(
@@ -61,34 +38,18 @@ query fetchAllTransactions($expiryTime: BigInt!) {
     id
     status
     chainId
-    preparedTimestamp
     user {
       id
     }
-    router {
-      id
-    }
-    receivingChainTxManagerAddress
     sendingAssetId
     receivingAssetId
-    sendingChainFallback
-    receivingAddress
-    callTo
     sendingChainId
     receivingChainId
-    callDataHash
-    transactionId
     amount
     expiry
     preparedBlockNumber
-    bidSignature
-    prepareCaller
-    fulfillCaller
-    cancelCaller
-    prepareTransactionHash
-    fulfillTransactionHash
+    preparedTimestamp
     fulfillTimestamp
-    cancelTransactionHash
   }
 }
 """

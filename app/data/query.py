@@ -8,8 +8,6 @@ from data.constants import (
     chain_asset_data,
     chain_mapping,
 )
-import requests
-import pickle
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
@@ -52,8 +50,7 @@ def fetch_chain_transactions(query, params, transport, chain, expiry_cut_off):
 
         for tr in result["transactions"]:
             list_values = list(tr.values())
-            list_values[20] = list_values[20]["id"]
-            list_values[26] = list_values[26]["id"]
+            list_values[12] = list_values[12]["id"]
             dataframe.loc[len(dataframe.index)] = list_values
         if len(result["transactions"]) == 0:
             break
@@ -143,11 +140,6 @@ def fetch_txns_df(expiry_cut_off):
     two_sided_txns = pd.concat(
         [matic_txns, bsc_txns, xdai_txns, fantom_txns, arbitrum_txns]
     )
-
-    # # load database
-    # with open("two_sided_txns.pickle", "rb") as handle:
-    #     two_sided_txns = pickle.load(handle)
-
     if two_sided_txns.shape[0] == 0:
         print("No new rows to add")
         return two_sided_txns
@@ -171,8 +163,14 @@ def fetch_txns_df(expiry_cut_off):
     )
 
     print(two_sided_txns.shape)
-    repeat_txns = two_sided_txns[two_sided_txns["txn_type"] == "repeat"].copy(deep=True)
-    one_sided_txns = two_sided_txns[two_sided_txns["txn_type"] == "single"].copy(
+    compact_data_txns = two_sided_txns.drop(
+        ["receivingChainId", "chainId", "sendingChainId"], axis=1
+    )
+
+    repeat_txns = compact_data_txns[compact_data_txns["txn_type"] == "repeat"].copy(
+        deep=True
+    )
+    one_sided_txns = compact_data_txns[compact_data_txns["txn_type"] == "single"].copy(
         deep=True
     )
     repeat_txns.reset_index(drop=True, inplace=True)
@@ -180,23 +178,15 @@ def fetch_txns_df(expiry_cut_off):
 
     dem2_merge_cols = [
         "id",
-        "bidSignature",
         "receivingAssetId",
-        "callTo",
         "asset_token",
-        "sendingChainFallback",
-        "receivingChainTxManagerAddress",
-        "transactionId",
         "user",
         "sendingAssetId",
         "receivingChainId",
         "receivingAddress",
-        "router",
         "asset_movement",
         "sendingChainId",
-        "callDataHash",
     ]
-
     merged_txns = pd.merge(
         left=one_sided_txns,
         right=repeat_txns,
