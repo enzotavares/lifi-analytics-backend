@@ -14,18 +14,15 @@ GET request to
 ```
 http://3.131.21.10/general_stats/
 ```
-Or click [here](http://3.131.21.10/general_stats/)
 
 ### Date wise volume distributed
 GET request to 
 ```
 http://3.131.21.10/date_volume/
 ```
-Or click [here](http://3.131.21.10/date_volume/)
 
 ### Asset movement across chains
 GET request to 
 ```
 http://3.131.21.10/asset_movement/
 ```
-Or click [here](http://3.131.21.10/asset_movement/)
