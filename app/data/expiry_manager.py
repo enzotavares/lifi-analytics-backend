@@ -2,7 +2,7 @@ import pytz
 from datetime import datetime, timedelta
 
 
-def update_cut_off(expiry_cut_off):
+def get_exp_cut_off():
     utc_tz = pytz.timezone("UTC")
 
     utc_midnight = datetime.strptime(

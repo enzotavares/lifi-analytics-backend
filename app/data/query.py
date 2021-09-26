@@ -182,10 +182,7 @@ def fetch_txns_df(expiry_cut_off):
         "asset_token",
         "user",
         "sendingAssetId",
-        "receivingChainId",
-        "receivingAddress",
         "asset_movement",
-        "sendingChainId",
     ]
     merged_txns = pd.merge(
         left=one_sided_txns,
