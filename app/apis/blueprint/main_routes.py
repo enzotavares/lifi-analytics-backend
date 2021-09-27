@@ -127,6 +127,7 @@ def update_cached_data():
     compact_data_txns = pd.read_sql(
         sql=db.session.query(Txns).statement, con=db.session.bind
     )
+    compact_data_txns = compact_data_txns.drop("id", axis=1)
     repeat_txns = compact_data_txns[compact_data_txns["txn_type"] == "repeat"].copy(
         deep=True
     )
@@ -137,7 +138,7 @@ def update_cached_data():
     one_sided_txns.reset_index(drop=True, inplace=True)
 
     dem2_merge_cols = [
-        "id",
+        "subgraphId",
         "receivingAssetId",
         "asset_token",
         "user",
