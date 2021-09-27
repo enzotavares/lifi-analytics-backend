@@ -58,9 +58,9 @@ def init_db(df):
     db.session.commit()
 
 
-def add_txns(df):
+def add_txns(df, prep_cut_off):
     rows = []
-    clear_table_with_expiry(Txns)
+    clear_table_with_expiry(Txns, prep_cut_off)
 
     for index, row in df.iterrows():
         new_row = Txns(
@@ -110,7 +110,7 @@ def update_db():
             init_db(df)
             return
         df = fetch_txns_df(prep_cut_off)
-        add_txns(df)
+        add_txns(df, prep_cut_off)
         update_cached_data()
 
 
