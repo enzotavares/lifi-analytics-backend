@@ -12,20 +12,21 @@ All requests are GET requests appended to the above endpoint.
 ### General Stats
 GET request to 
 ```
-http://3.131.21.10/general_stats/
+http://3.131.21.10/general_stats
 ```
-Or click [here](http://3.131.21.10/general_stats/)
+Click [here](http://3.131.21.10/general_stats) to check out the json. 
+
 
 ### Date wise volume distributed
 GET request to 
 ```
-http://3.131.21.10/date_volume/
+http://3.131.21.10/date_volume
 ```
-Or click [here](http://3.131.21.10/date_volume/)
+Click [here](http://3.131.21.10/date_volume) to check out the json. 
 
 ### Asset movement across chains
 GET request to 
 ```
-http://3.131.21.10/asset_movement/
+http://3.131.21.10/asset_movement
 ```
-Or click [here](http://3.131.21.10/asset_movement/)
+Click [here](http://3.131.21.10/date_volume) to check out the json. 
