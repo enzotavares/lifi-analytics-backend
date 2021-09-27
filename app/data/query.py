@@ -165,5 +165,6 @@ def fetch_txns_df(prep_cut_off):
     compact_data_txns = two_sided_txns.drop(
         ["receivingChainId", "chainId", "sendingChainId"], axis=1
     )
+    compact_data_txns.replace({np.NaN: None}, inplace=True)
 
     return compact_data_txns
