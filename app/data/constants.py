@@ -1,14 +1,6 @@
 from gql import Client, gql
 
 
-last_blocs = {
-    "Polygon": "18421338",
-    "BSC": "10370113",
-    "Fantom": "15584609",
-    "xDai": "17774514",
-    "Arbitrum": "244433",
-}
-
 txn_columns = [
     "amount",
     "chainId",
@@ -28,11 +20,11 @@ txn_columns = [
 # Provide a GraphQL query
 txns_query = gql(
     """
-query fetchAllTransactions($expiryTime: BigInt!) {
+query fetchAllTransactions($preparedTime: BigInt!) {
   transactions (
     first:1000, 
-    where: { expiry_gt: $expiryTime },
-    orderBy: expiry
+    where: { preparedTimestamp_gt: $preparedTime },
+    orderBy: preparedTimestamp
     orderDirection: asc
   ){
     id
@@ -55,7 +47,7 @@ query fetchAllTransactions($expiryTime: BigInt!) {
 """
 )
 
-txns_params = {"expiryTime": "1632355200"}
+txns_params = {"preparedTime": "1632355200"}
 
 chain_mapping = {
     "56": "BSC",

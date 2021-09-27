@@ -4,7 +4,6 @@ from data.constants import (
     txn_columns,
     txns_params,
     txns_query,
-    last_blocs,
     chain_asset_data,
     chain_mapping,
 )
@@ -37,14 +36,14 @@ def concat_dfs(main_df, new_df):
     return result
 
 
-def fetch_chain_transactions(query, params, transport, chain, expiry_cut_off):
+def fetch_chain_transactions(query, params, transport, chain, prep_cut_off):
 
     dataframe = pd.DataFrame(columns=txn_columns)
 
     # Create a GraphQL client using the defined transport
     client = Client(transport=transport, fetch_schema_from_transport=True)
 
-    params["expiryTime"] = expiry_cut_off
+    params["preparedTime"] = prep_cut_off
     while True:  # Just a random no.
         result = client.execute(query, params)
 
@@ -54,7 +53,7 @@ def fetch_chain_transactions(query, params, transport, chain, expiry_cut_off):
             dataframe.loc[len(dataframe.index)] = list_values
         if len(result["transactions"]) == 0:
             break
-        params["expiryTime"] = result["transactions"][-1]["expiry"]
+        params["preparedTime"] = result["transactions"][-1]["preparedTimestamp"]
         if len(result["transactions"]) < 1000:
             break
     print(dataframe.shape[0], end="-")
@@ -99,7 +98,7 @@ def time_taken(row):
     return time_taken
 
 
-def fetch_txns_df(expiry_cut_off):
+def fetch_txns_df(prep_cut_off):
     matic_txns = pd.DataFrame(columns=txn_columns)
     bsc_txns = pd.DataFrame(columns=txn_columns)
     xdai_txns = pd.DataFrame(columns=txn_columns)
@@ -107,27 +106,27 @@ def fetch_txns_df(expiry_cut_off):
     arbitrum_txns = pd.DataFrame(columns=txn_columns)
 
     new_df = fetch_chain_transactions(
-        txns_query, txns_params, transport_matic, "Polygon", expiry_cut_off
+        txns_query, txns_params, transport_matic, "Polygon", prep_cut_off
     )
     matic_txns = concat_dfs(matic_txns, new_df)
 
     new_df = fetch_chain_transactions(
-        txns_query, txns_params, transport_bsc, "BSC", expiry_cut_off
+        txns_query, txns_params, transport_bsc, "BSC", prep_cut_off
     )
     bsc_txns = concat_dfs(bsc_txns, new_df)
 
     new_df = fetch_chain_transactions(
-        txns_query, txns_params, transport_xdai, "xDai", expiry_cut_off
+        txns_query, txns_params, transport_xdai, "xDai", prep_cut_off
     )
     xdai_txns = concat_dfs(xdai_txns, new_df)
 
     new_df = fetch_chain_transactions(
-        txns_query, txns_params, transport_fantom, "Fantom", expiry_cut_off
+        txns_query, txns_params, transport_fantom, "Fantom", prep_cut_off
     )
     fantom_txns = concat_dfs(fantom_txns, new_df)
 
     new_df = fetch_chain_transactions(
-        txns_query, txns_params, transport_arbitrum, "Arbitrum", expiry_cut_off
+        txns_query, txns_params, transport_arbitrum, "Arbitrum", prep_cut_off
     )
     arbitrum_txns = concat_dfs(arbitrum_txns, new_df)
 
@@ -167,39 +166,4 @@ def fetch_txns_df(expiry_cut_off):
         ["receivingChainId", "chainId", "sendingChainId"], axis=1
     )
 
-    repeat_txns = compact_data_txns[compact_data_txns["txn_type"] == "repeat"].copy(
-        deep=True
-    )
-    one_sided_txns = compact_data_txns[compact_data_txns["txn_type"] == "single"].copy(
-        deep=True
-    )
-    repeat_txns.reset_index(drop=True, inplace=True)
-    one_sided_txns.reset_index(drop=True, inplace=True)
-
-    dem2_merge_cols = [
-        "id",
-        "receivingAssetId",
-        "asset_token",
-        "user",
-        "sendingAssetId",
-        "asset_movement",
-    ]
-    merged_txns = pd.merge(
-        left=one_sided_txns,
-        right=repeat_txns,
-        how="outer",
-        left_on=dem2_merge_cols,
-        right_on=dem2_merge_cols,
-    )
-    print("Merged", merged_txns.shape)
-    merged_txns["time_taken"] = merged_txns.apply(time_taken, axis=1)
-    merged_txns["time_taken_seconds"] = merged_txns["time_taken"].apply(
-        lambda x: x.seconds
-    )
-
-    merged_txns.replace({np.NaN: None}, inplace=True)
-    # fulfilled_txns = merged_txns[
-    #     (merged_txns.status_x == "Fulfilled") & (merged_txns.status_y == "Fulfilled")
-    # ].copy(deep=True)
-
-    return merged_txns
+    return compact_data_txns
