@@ -10,6 +10,7 @@ from data.constants import (
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
+import pickle
 
 transport_matic = AIOHTTPTransport(
     url="https://api.thegraph.com/subgraphs/name/0xakshay/nxtpmatic"
@@ -98,7 +99,7 @@ def time_taken(row):
     return time_taken
 
 
-def fetch_txns_df(prep_cut_off):
+def fetch_txns_df2(prep_cut_off):
     matic_txns = pd.DataFrame(columns=txn_columns)
     bsc_txns = pd.DataFrame(columns=txn_columns)
     xdai_txns = pd.DataFrame(columns=txn_columns)
@@ -166,5 +167,13 @@ def fetch_txns_df(prep_cut_off):
         ["receivingChainId", "chainId", "sendingChainId"], axis=1
     )
     compact_data_txns.replace({np.NaN: None}, inplace=True)
+    # load database
 
+    return compact_data_txns
+
+
+def fetch_txns_df(prep_cut_off):
+    with open("two_sided_txns.pickle", "rb") as handle:
+        compact_data_txns = pickle.load(handle)
+    compact_data_txns.replace({np.NaN: None}, inplace=True)
     return compact_data_txns

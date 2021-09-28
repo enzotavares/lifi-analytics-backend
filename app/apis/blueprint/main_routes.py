@@ -168,9 +168,9 @@ def update_cached_data():
     )
     date_volume = (
         fulfilled_txns.groupby("date")
-        .agg({"id": "count", "dollar_amount_x": "sum"})
+        .agg({"subgraphId": "count", "dollar_amount_x": "sum"})
         .reset_index()
-        .rename(columns={"id": "txns", "dollar_amount_x": "volume"})
+        .rename(columns={"subgraphId": "txns", "dollar_amount_x": "volume"})
     )
     date_volume.to_sql("date_volume", db.engine, if_exists="replace", index_label="id")
 
@@ -180,11 +180,17 @@ def update_cached_data():
 
     asset_movement = (
         fulfilled_txns.groupby("asset_movement")
-        .agg({"id": "count", "dollar_amount_x": "sum", "time_taken_seconds": "mean"})
+        .agg(
+            {
+                "subgraphId": "count",
+                "dollar_amount_x": "sum",
+                "time_taken_seconds": "mean",
+            }
+        )
         .reset_index()
         .rename(
             columns={
-                "id": "txns",
+                "subgraphId": "txns",
                 "dollar_amount_x": "volume",
                 "time_taken_seconds": "time_taken",
             }
@@ -227,8 +233,9 @@ def update_cached_data():
 
 @blueprint.route("/")
 def hello_world():
-    rows = db.session.query(Txns).count()
-    count = rows
+    # rows = db.session.query(Txns).count()
+    update_db()
+    count = 1221
     # sql = text("select count(*) from txns")
     # result = db.engine.execute(sql)
     # rows = [row[0] for row in result]
