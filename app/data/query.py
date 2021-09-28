@@ -99,7 +99,7 @@ def time_taken(row):
     return time_taken
 
 
-def fetch_txns_df2(prep_cut_off):
+def fetch_txns_df(prep_cut_off):
     matic_txns = pd.DataFrame(columns=txn_columns)
     bsc_txns = pd.DataFrame(columns=txn_columns)
     xdai_txns = pd.DataFrame(columns=txn_columns)
@@ -172,7 +172,7 @@ def fetch_txns_df2(prep_cut_off):
     return compact_data_txns
 
 
-def fetch_txns_df(prep_cut_off):
+def fetch_txns_df_test(prep_cut_off):
     with open("two_sided_txns.pickle", "rb") as handle:
         compact_data_txns = pickle.load(handle)
     compact_data_txns.replace({np.NaN: None}, inplace=True)
