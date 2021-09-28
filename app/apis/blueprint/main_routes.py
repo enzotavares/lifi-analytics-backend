@@ -233,9 +233,9 @@ def update_cached_data():
 
 @blueprint.route("/")
 def hello_world():
-    # rows = db.session.query(Txns).count()
-    update_db()
-    count = 1221
+    rows = db.session.query(Txns).count()
+    # update_db()
+    count = rows
     # sql = text("select count(*) from txns")
     # result = db.engine.execute(sql)
     # rows = [row[0] for row in result]
