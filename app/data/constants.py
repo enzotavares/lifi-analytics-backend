@@ -65,6 +65,7 @@ chain_case_mapping = {
     "all": "all",
 }
 
+
 chain_asset_data = {
     "Ethereum": {
         "0x0000000000000000000000000000000000000000": {"token": "ETH", "decimals": 18},
@@ -87,6 +88,7 @@ chain_asset_data = {
         "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3": {"token": "DAI", "decimals": 18},
         "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d": {"token": "USDC", "decimals": 18},
         "0x55d398326f99059ff775485246999027b3197955": {"token": "USDT", "decimals": 18},
+        "0xd9a54933b000d2c2eac81e8db7b294db16a73bfe": {"token": "FAKE", "decimals": 18},
     },
     "Polygon": {
         "0xfd8ee443ab7be5b1522a1c020c097cff1ddc1209": {"token": "ETH", "decimals": 18},
@@ -98,6 +100,7 @@ chain_asset_data = {
         "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063": {"token": "DAI", "decimals": 18},
         "0x2791bca1f2de4661ed88a30c99a7a9449aa84174": {"token": "USDC", "decimals": 6},
         "0xc2132d05d31c914a87c6611c10748aeb04b58e8f": {"token": "USDT", "decimals": 6},
+        "0xb32786dc23a6511f88cba528c1e5175c182091b9": {"token": "FAKE", "decimals": 18},
     },
     "xDai": {
         "0xa5c7cb68cd81640d40c85b2e5ec9e4bb55be0214": {"token": "ETH", "decimals": 18},

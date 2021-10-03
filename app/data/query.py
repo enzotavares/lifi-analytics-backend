@@ -1,5 +1,6 @@
 from gql import Client, gql
 from gql.transport.aiohttp import AIOHTTPTransport
+from gql.transport.requests import RequestsHTTPTransport
 from data.constants import (
     txn_columns,
     txns_params,
@@ -12,19 +13,19 @@ import numpy as np
 from datetime import datetime, timedelta
 import pickle
 
-transport_matic = AIOHTTPTransport(
+transport_matic = RequestsHTTPTransport(
     url="https://api.thegraph.com/subgraphs/name/0xakshay/nxtpmatic"
 )
-transport_bsc = AIOHTTPTransport(
+transport_bsc = RequestsHTTPTransport(
     url="https://api.thegraph.com/subgraphs/name/0xakshay/nxtpbsc"
 )
-transport_xdai = AIOHTTPTransport(
+transport_xdai = RequestsHTTPTransport(
     url="https://api.thegraph.com/subgraphs/name/0xakshay/nxtpxdai"
 )
-transport_fantom = AIOHTTPTransport(
+transport_fantom = RequestsHTTPTransport(
     url="https://api.thegraph.com/subgraphs/name/0xakshay/nxtpfantom"
 )
-transport_arbitrum = AIOHTTPTransport(
+transport_arbitrum = RequestsHTTPTransport(
     url="https://api.thegraph.com/subgraphs/name/0xakshay/nxtparbitrum"
 )
 
@@ -153,6 +154,9 @@ def fetch_txns_df(prep_cut_off):
     two_sided_txns["decimals"] = two_sided_txns.apply(asset_decimal_mapper, axis=1)
 
     two_sided_txns["dollar_amount"] = two_sided_txns.apply(dollar_amount, axis=1)
+    two_sided_txns = two_sided_txns.drop(
+        two_sided_txns[two_sided_txns.asset_token == "FAKE"].index, axis=0
+    )
 
     two_sided_txns["time_prepared"] = two_sided_txns["preparedTimestamp"].apply(
         lambda x: pd.to_datetime(x, unit="s")
