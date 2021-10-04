@@ -50,11 +50,31 @@ query fetchAllTransactions($preparedTime: BigInt!) {
 txns_params = {"preparedTime": "1632355200"}
 
 chain_mapping = {
+    "1": "Ethereum",
+    "4": "Rinkeby",
+    "5": "Goerli",
+    "28": "OMGX-Rinkeby",
     "56": "BSC",
+    "66": "OKExChain",
+    "69": "Optimism-Kovan",
+    "97": "BSC",
+    "100": "xDAI",
+    "128": "Huobi",
     "137": "Polygon",
     "250": "Fantom",
-    "100": "xDai",
+    "256": "HT",
+    "321": "KCC",
+    "1285": "Moonriver",
+    "4689": "IoTeX",
+    "32659": "Fusion",
     "42161": "Arbitrum",
+    "43114": "Avalanche",
+    "421611": "Arbitrum-Rinkeby",
+    "1666600000": "Harmony",
+    "BTC": "Bitcoin",
+    "LTC": "Litecoin",
+    "BLOCK": "Blocknet",
+    "COLX": "ColossusXT",
 }
 chain_case_mapping = {
     "bsc": "BSC",
@@ -122,5 +142,6 @@ chain_asset_data = {
     "Arbitrum": {
         "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8": {"token": "USDC", "decimals": 6},
         "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9": {"token": "USDT", "decimals": 6},
+        "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1": {"token": "DAI", "decimals": 18},
     },
 }

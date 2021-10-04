@@ -123,6 +123,34 @@ class AssetMovement(db.Model):
         }
 
 
+class BridgesTvl(db.Model):
+    __tablename__ = "bridges_tvl"
+
+    id = db.Column(db.Integer, primary_key=True)
+    token = db.Column(db.String())
+    chain = db.Column(db.String())
+    bridge = db.Column(db.String())
+    tvl = db.Column(db.Float())
+
+    def __init__(self, token, chain, bridge, tvl):
+        self.token = token
+        self.chain = chain
+        self.bridge = bridge
+        self.tvl = tvl
+
+    def __repr__(self):
+        return "<id {}>".format(self.id)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "token": self.token,
+            "chain": self.chain,
+            "bridge": self.bridge,
+            "tvl": self.tvl,
+        }
+
+
 class Misc(db.Model):
     __tablename__ = "misc"
 
