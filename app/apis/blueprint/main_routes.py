@@ -101,9 +101,7 @@ def bridges_tvl():
     combined_duplicate_tokens = pd.read_sql(
         sql=db.session.query(BridgesTvl).statement, con=db.session.bind
     )
-    print("Done fetching from postgres", datetime.now())
     combined_duplicate_tokens = combined_duplicate_tokens.drop("id", axis=1)
-    print("Dropped id", datetime.now())
 
     grouped_tvl = (
         combined_duplicate_tokens.groupby(["token", "chain"])
@@ -114,23 +112,22 @@ def bridges_tvl():
         )
         .reset_index()
     )
-    print("grouped_tvl ", datetime.now())
 
-    # grouped_tvl["bridges"] = grouped_tvl.apply(
-    #     util_join_bridges, args=[combined_duplicate_tokens], axis=1
-    # )
-    print("Joined bridges", datetime.now())
     sorted_tvl = grouped_tvl.sort_values(["bridge_count", "tvl"], ascending=False)
-    print("Sorted gtvl", datetime.now())
     tvl_pairs = sorted_tvl.to_dict(orient="records")
     tvl_bridges = (
         combined_duplicate_tokens.groupby("bridge")
         .sum("tvl")
         .reset_index()
         .to_dict(orient="records")
+        .to_dict(orient="records")
     )
-    print("Grouped TVL Bridges", datetime.now())
-    return_data = {"tvl_bridges": tvl_bridges, "tvl_pairs": tvl_pairs}
+    tvl_individual = combined_duplicate_tokens
+    return_data = {
+        "tvl_bridges": tvl_bridges,
+        "tvl_pairs": tvl_pairs,
+        "tvl_individual": tvl_individual,
+    }
 
     print("Au revoir", datetime.now())
     return jsonify({"data": return_data})
