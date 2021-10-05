@@ -107,15 +107,15 @@ def bridges_tvl():
 
     grouped_tvl = (
         combined_duplicate_tokens.groupby(["token", "chain"])
-        .agg({"bridge": "count", "tvl": "sum"})
+        .agg({"bridge": ",".join, "tvl": "sum"})
         .reset_index()
-        .rename({"bridge": "bridge_count"}, axis=1)
+        .rename({"bridge": "bridges"}, axis=1)
     )
     print("grouped_tvl ", datetime.now())
 
-    grouped_tvl["bridges"] = grouped_tvl.apply(
-        util_join_bridges, args=[combined_duplicate_tokens], axis=1
-    )
+    # grouped_tvl["bridges"] = grouped_tvl.apply(
+    #     util_join_bridges, args=[combined_duplicate_tokens], axis=1
+    # )
     print("Joined bridges", datetime.now())
     sorted_tvl = grouped_tvl.sort_values(["bridge_count", "tvl"], ascending=False)
     print("Sorted gtvl", datetime.now())
