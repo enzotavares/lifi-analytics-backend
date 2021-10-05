@@ -1,3 +1,4 @@
+from datetime import datetime
 from os import RTLD_NOW, cpu_count
 from flask import jsonify
 import pandas as pd
@@ -96,10 +97,13 @@ def get_asset_movement():
 
 @blueprint.route("/bridges_tvl")
 def bridges_tvl():
+    print("Hello there, general liquidity", datetime.now())
     combined_duplicate_tokens = pd.read_sql(
         sql=db.session.query(BridgesTvl).statement, con=db.session.bind
     )
+    print("Done fetching from postgres", datetime.now())
     combined_duplicate_tokens = combined_duplicate_tokens.drop("id", axis=1)
+    print("Dropped id", datetime.now())
 
     grouped_tvl = (
         combined_duplicate_tokens.groupby(["token", "chain"])
@@ -107,11 +111,14 @@ def bridges_tvl():
         .reset_index()
         .rename({"bridge": "bridge_count"}, axis=1)
     )
+    print("grouped_tvl ", datetime.now())
 
     grouped_tvl["bridges"] = grouped_tvl.apply(
         util_join_bridges, args=[combined_duplicate_tokens], axis=1
     )
+    print("Joined bridges", datetime.now())
     sorted_tvl = grouped_tvl.sort_values(["bridge_count", "tvl"], ascending=False)
+    print("Sorted gtvl", datetime.now())
     tvl_pairs = sorted_tvl.to_dict(orient="records")
     tvl_bridges = (
         combined_duplicate_tokens.groupby("bridge")
@@ -119,6 +126,8 @@ def bridges_tvl():
         .reset_index()
         .to_dict(orient="records")
     )
+    print("Grouped TVL Bridges", datetime.now())
     return_data = {"tvl_bridges": tvl_bridges, "tvl_pairs": tvl_pairs}
 
+    print("Au revoir", datetime.now())
     return jsonify({"data": return_data})
