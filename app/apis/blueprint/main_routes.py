@@ -101,9 +101,7 @@ def bridges_tvl():
     combined_duplicate_tokens = pd.read_sql(
         sql=db.session.query(BridgesTvl).statement, con=db.session.bind
     )
-    combined_duplicate_tokens = combined_duplicate_tokens.drop("id", axis=1).to_dict(
-        orient="records"
-    )
+    combined_duplicate_tokens = combined_duplicate_tokens.drop("id", axis=1)
 
     grouped_tvl = (
         combined_duplicate_tokens.groupby(["token", "chain"])
@@ -123,7 +121,7 @@ def bridges_tvl():
         .reset_index()
         .to_dict(orient="records")
     )
-    tvl_individual = combined_duplicate_tokens
+    tvl_individual = combined_duplicate_tokens.to_dict(orient="records")
     return_data = {
         "tvl_bridges": tvl_bridges,
         "tvl_pairs": tvl_pairs,
