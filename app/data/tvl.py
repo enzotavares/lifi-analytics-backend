@@ -51,6 +51,9 @@ def get_anyswap_tvl():
     anyswap_df.tvl = anyswap_df.tvl.replace("", 0.0)
 
     anyswap_df["chain"] = anyswap_df.chainId.apply(lambda x: chain_mapping[x])
+    anyswap_df.drop(
+        anyswap_df[anyswap_df.chain == "Goerli"].index, axis=0, inplace=True
+    )
     anyswap_tvl = anyswap_df[["chain", "symbol", "tvl"]].copy(deep=True)
     anyswap_tvl.rename({"symbol": "token"}, axis=1, inplace=True)
     anyswap_tvl.token = anyswap_tvl.token.str.replace("any", "")
@@ -96,16 +99,45 @@ def get_hop_tvl():
     return hop_tvl
 
 
+def get_celer_tvl():
+    celer_bridges_url = (
+        "https://cbridge-stat.s3.us-west-2.amazonaws.com/mainnet/cbridge-stat.json"
+    )
+    initial_url = celer_bridges_url
+    response = requests.get(initial_url)
+
+    if response.status_code != 200:
+        raise Exception(
+            "Cannot get rules (HTTP {}): {}".format(response.status_code, response.text)
+        )
+
+    result = response.json()
+
+    celer_tvl = pd.DataFrame(columns=["chain", "token", "tvl"])
+
+    for chain in result["aggregateAvailableLiquidityDetail"]:
+        for token in chain["liquidityDetail"]:
+            entry = {
+                "chain": chain_mapping[chain["chainId"]],
+                "token": token["tokenSymbol"],
+                "tvl": float(token["liquidity"].replace("$", "")),
+            }
+            celer_tvl = celer_tvl.append(entry, ignore_index=True)
+    return celer_tvl
+
+
 def get_combined_tvl():
     anyswap_tvl = get_anyswap_tvl()
     hop_tvl = get_hop_tvl()
     nxtp_tvl = get_nxtp_tvl()
+    celer_tvl = get_celer_tvl()
 
     anyswap_tvl["bridge"] = "anyswap"
     hop_tvl["bridge"] = "hop"
     nxtp_tvl["bridge"] = "nxtp"
+    celer_tvl["bridge"] = "celer"
 
-    combined_tvl = pd.concat([anyswap_tvl, hop_tvl, nxtp_tvl])
+    combined_tvl = pd.concat([anyswap_tvl, hop_tvl, nxtp_tvl, celer_tvl])
 
     combined_tvl.chain = combined_tvl.chain.apply(lambda x: x.lower())
     combined_duplicate_tokens = (
@@ -114,12 +146,3 @@ def get_combined_tvl():
         .reset_index()
     )
     return combined_duplicate_tokens
-
-
-def util_join_bridges(row, combined_duplicate_tokens):
-    return ",".join(
-        combined_duplicate_tokens[
-            (combined_duplicate_tokens.token == row["token"])
-            & (combined_duplicate_tokens.chain == row["chain"])
-        ]["bridge"].values
-    )

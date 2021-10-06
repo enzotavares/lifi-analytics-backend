@@ -4,7 +4,7 @@ from flask import jsonify
 import pandas as pd
 
 
-from data.tvl import get_combined_tvl, util_join_bridges
+from data.tvl import get_combined_tvl
 from data.models import AssetMovement, Txns, Misc, DateVolume, BridgesTvl
 from apis import db
 from data.query import fetch_txns_df

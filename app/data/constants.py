@@ -53,6 +53,7 @@ chain_mapping = {
     "1": "Ethereum",
     "4": "Rinkeby",
     "5": "Goerli",
+    "10": "Optimism",
     "28": "OMGX-Rinkeby",
     "56": "BSC",
     "66": "OKExChain",
