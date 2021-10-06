@@ -120,7 +120,6 @@ def bridges_tvl():
         .sum("tvl")
         .reset_index()
         .to_dict(orient="records")
-        .to_dict(orient="records")
     )
     tvl_individual = combined_duplicate_tokens
     return_data = {

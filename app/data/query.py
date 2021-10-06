@@ -60,6 +60,7 @@ def fetch_chain_transactions(query, params, transport, chain, prep_cut_off):
             break
     print(dataframe.shape[0], end="-")
     print("Fetched from", chain)
+    client.transport.close()
     return dataframe
 
 
