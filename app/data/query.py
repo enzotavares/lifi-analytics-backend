@@ -14,19 +14,22 @@ from datetime import datetime, timedelta
 import pickle
 
 transport_matic = RequestsHTTPTransport(
-    url="https://api.thegraph.com/subgraphs/name/0xakshay/nxtpmatic"
+    url="https://api.thegraph.com/subgraphs/name/connext/nxtp-matic"
 )
 transport_bsc = RequestsHTTPTransport(
-    url="https://api.thegraph.com/subgraphs/name/0xakshay/nxtpbsc"
+    url="https://api.thegraph.com/subgraphs/name/connext/nxtp-bsc"
 )
 transport_xdai = RequestsHTTPTransport(
-    url="https://api.thegraph.com/subgraphs/name/0xakshay/nxtpxdai"
+    url="https://api.thegraph.com/subgraphs/name/connext/nxtp-xdai"
 )
 transport_fantom = RequestsHTTPTransport(
-    url="https://api.thegraph.com/subgraphs/name/0xakshay/nxtpfantom"
+    url="https://api.thegraph.com/subgraphs/name/connext/nxtp-fantom"
 )
 transport_arbitrum = RequestsHTTPTransport(
-    url="https://api.thegraph.com/subgraphs/name/0xakshay/nxtparbitrum"
+    url="https://api.thegraph.com/subgraphs/name/connext/nxtp-arbitrum-one"
+)
+transport_avalanche = RequestsHTTPTransport(
+    url="https://api.thegraph.com/subgraphs/name/connext/nxtp-avalanche"
 )
 
 
@@ -43,24 +46,26 @@ def fetch_chain_transactions(query, params, transport, chain, prep_cut_off):
     dataframe = pd.DataFrame(columns=txn_columns)
 
     # Create a GraphQL client using the defined transport
-    client = Client(transport=transport, fetch_schema_from_transport=True)
 
-    params["preparedTime"] = prep_cut_off
-    while True:  # Just a random no.
-        result = client.execute(query, params)
+    with Client(transport=transport, fetch_schema_from_transport=True) as client:
 
-        for tr in result["transactions"]:
-            list_values = list(tr.values())
-            list_values[12] = list_values[12]["id"]
-            dataframe.loc[len(dataframe.index)] = list_values
-        if len(result["transactions"]) == 0:
-            break
-        params["preparedTime"] = result["transactions"][-1]["preparedTimestamp"]
-        if len(result["transactions"]) < 1000:
-            break
-    print(dataframe.shape[0], end="-")
-    print("Fetched from", chain)
-    client.transport.close()
+        params["preparedTime"] = prep_cut_off
+        while True:  # Just a random no.
+            result = client.execute(query, params)
+
+            for tr in result["transactions"]:
+                list_values = list(tr.values())
+                list_values[12] = list_values[12]["id"]
+                dataframe.loc[len(dataframe.index)] = list_values
+            if len(result["transactions"]) == 0:
+                break
+            params["preparedTime"] = result["transactions"][-1]["preparedTimestamp"]
+            if len(result["transactions"]) < 1000:
+                break
+        print(dataframe.shape[0], end="-")
+        print("Fetched from", chain)
+        transport.close()
+        client.transport.close()
     return dataframe
 
 
@@ -97,6 +102,8 @@ def dollar_amount(row):
 
 
 def time_taken(row):
+    if row["time_fulfilled_y"] < row["time_prepared_x"]:
+        return timedelta(0)
     time_taken = row["time_fulfilled_y"] - row["time_prepared_x"]
     return time_taken
 
@@ -107,6 +114,7 @@ def fetch_txns_df(prep_cut_off):
     xdai_txns = pd.DataFrame(columns=txn_columns)
     fantom_txns = pd.DataFrame(columns=txn_columns)
     arbitrum_txns = pd.DataFrame(columns=txn_columns)
+    avalanche_txns = pd.DataFrame(columns=txn_columns)
 
     new_df = fetch_chain_transactions(
         txns_query, txns_params, transport_matic, "Polygon", prep_cut_off
@@ -133,14 +141,20 @@ def fetch_txns_df(prep_cut_off):
     )
     arbitrum_txns = concat_dfs(arbitrum_txns, new_df)
 
+    new_df = fetch_chain_transactions(
+        txns_query, txns_params, transport_avalanche, "Avalanche", prep_cut_off
+    )
+    avalanche_txns = concat_dfs(avalanche_txns, new_df)
+
     matic_txns["chain"] = "Polygon"
     bsc_txns["chain"] = "BSC"
     xdai_txns["chain"] = "xDai"
     fantom_txns["chain"] = "Fantom"
     arbitrum_txns["chain"] = "Arbitrum"
+    avalanche_txns["chain"] = "Avalanche"
 
     two_sided_txns = pd.concat(
-        [matic_txns, bsc_txns, xdai_txns, fantom_txns, arbitrum_txns]
+        [matic_txns, bsc_txns, xdai_txns, fantom_txns, arbitrum_txns, avalanche_txns]
     )
     if two_sided_txns.shape[0] == 0:
         print("No new rows to add")

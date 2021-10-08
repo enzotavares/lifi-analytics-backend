@@ -83,6 +83,7 @@ chain_case_mapping = {
     "fantom": "Fantom",
     "xdai": "xDai",
     "arbitrum": "Arbitrum",
+    "avalanche": "Avalanche",
     "all": "all",
 }
 
@@ -144,5 +145,10 @@ chain_asset_data = {
         "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8": {"token": "USDC", "decimals": 6},
         "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9": {"token": "USDT", "decimals": 6},
         "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1": {"token": "DAI", "decimals": 18},
+    },
+    "Avalanche": {
+        "0xa7d7079b0fead91f3e65f86e8915cb59c1a4c664": {"token": "USDC", "decimals": 6},
+        "0xc7198437980c041c805a1edcba50c1ce5db95118": {"token": "USDT", "decimals": 6},
+        "0xd586e7f844cea2f87f50152665bcbc2c279d8d70": {"token": "DAI", "decimals": 18},
     },
 }
