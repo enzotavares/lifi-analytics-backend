@@ -56,19 +56,22 @@ def fetch_routers(query, params, transport, dataframe, chain):
 def get_nxtp_tvl():
 
     transport_matic = RequestsHTTPTransport(
-        url="https://api.thegraph.com/subgraphs/name/0xakshay/nxtpmatic"
+        url="https://api.thegraph.com/subgraphs/name/connext/nxtp-matic"
     )
     transport_bsc = RequestsHTTPTransport(
-        url="https://api.thegraph.com/subgraphs/name/0xakshay/nxtpbsc"
+        url="https://api.thegraph.com/subgraphs/name/connext/nxtp-bsc"
     )
     transport_xdai = RequestsHTTPTransport(
-        url="https://api.thegraph.com/subgraphs/name/0xakshay/nxtpxdai"
+        url="https://api.thegraph.com/subgraphs/name/connext/nxtp-xdai"
     )
     transport_fantom = RequestsHTTPTransport(
-        url="https://api.thegraph.com/subgraphs/name/0xakshay/nxtpfantom"
+        url="https://api.thegraph.com/subgraphs/name/connext/nxtp-fantom"
     )
     transport_arbitrum = RequestsHTTPTransport(
-        url="https://api.thegraph.com/subgraphs/name/0xakshay/nxtparbitrum"
+        url="https://api.thegraph.com/subgraphs/name/connext/nxtp-arbitrum-one"
+    )
+    transport_avalanche = RequestsHTTPTransport(
+        url="https://api.thegraph.com/subgraphs/name/connext/nxtp-avalanche"
     )
 
     router_columns = [
@@ -86,15 +89,24 @@ def get_nxtp_tvl():
     xdai_routers = pd.DataFrame(columns=router_columns)
     fantom_routers = pd.DataFrame(columns=router_columns)
     arbitrum_routers = pd.DataFrame(columns=router_columns)
+    avalanche_routers = pd.DataFrame(columns=router_columns)
 
     fetch_routers(query, params, transport_matic, matic_routers, "Polygon")
     fetch_routers(query, params, transport_bsc, bsc_routers, "BSC")
     fetch_routers(query, params, transport_xdai, xdai_routers, "xDai")
     fetch_routers(query, params, transport_fantom, fantom_routers, "Fantom")
     fetch_routers(query, params, transport_arbitrum, arbitrum_routers, "Arbitrum")
+    fetch_routers(query, params, transport_avalanche, avalanche_routers, "Avalanche")
 
     nxtp_df = pd.concat(
-        [matic_routers, bsc_routers, xdai_routers, fantom_routers, arbitrum_routers]
+        [
+            matic_routers,
+            bsc_routers,
+            xdai_routers,
+            fantom_routers,
+            arbitrum_routers,
+            avalanche_routers,
+        ]
     )
 
     nxtp_tvl = nxtp_df.groupby(["chain", "token"]).sum("tvl")
