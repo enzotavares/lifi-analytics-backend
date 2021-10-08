@@ -1,4 +1,4 @@
-from data.models import Txns, Misc
+from data.models import Txns, Misc, OldTxns
 from apis import db, app
 import pandas as pd
 from data.query import fetch_txns_df, time_taken
@@ -77,9 +77,15 @@ def add_txns(df, prep_cut_off):
 
 def update_cached_data():
     print("updatin cached databases")
-    compact_data_txns = pd.read_sql(
+    old_data_txns = pd.read_sql(
+        sql=db.session.query(OldTxns).statement, con=db.session.bind
+    )
+    new_data_txns = pd.read_sql(
         sql=db.session.query(Txns).statement, con=db.session.bind
     )
+
+    compact_data_txns = pd.concat([old_data_txns, new_data_txns])
+
     compact_data_txns = compact_data_txns.drop("id", axis=1)
     repeat_txns = compact_data_txns[compact_data_txns["txn_type"] == "repeat"].copy(
         deep=True
