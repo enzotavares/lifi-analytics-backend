@@ -38,8 +38,8 @@ def update_db():
             init_db(df)
             return
         df = fetch_txns_df(prep_cut_off)
-        # add_txns(df, prep_cut_off)
-        # update_cached_data()
+        add_txns(df, prep_cut_off)
+        update_cached_data()
 
 
 @scheduler.task(
