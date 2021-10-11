@@ -65,6 +65,7 @@ chain_mapping = {
     "250": "Fantom",
     "256": "HT",
     "321": "KCC",
+    "336": "Shiden Network",
     "1285": "Moonriver",
     "4689": "IoTeX",
     "32659": "Fusion",
