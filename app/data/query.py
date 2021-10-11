@@ -13,25 +13,6 @@ import numpy as np
 from datetime import datetime, timedelta
 import pickle
 
-transport_matic = RequestsHTTPTransport(
-    url="https://api.thegraph.com/subgraphs/name/connext/nxtp-matic"
-)
-transport_bsc = RequestsHTTPTransport(
-    url="https://api.thegraph.com/subgraphs/name/connext/nxtp-bsc"
-)
-transport_xdai = RequestsHTTPTransport(
-    url="https://api.thegraph.com/subgraphs/name/connext/nxtp-xdai"
-)
-transport_fantom = RequestsHTTPTransport(
-    url="https://api.thegraph.com/subgraphs/name/connext/nxtp-fantom"
-)
-transport_arbitrum = RequestsHTTPTransport(
-    url="https://api.thegraph.com/subgraphs/name/connext/nxtp-arbitrum-one"
-)
-transport_avalanche = RequestsHTTPTransport(
-    url="https://api.thegraph.com/subgraphs/name/connext/nxtp-avalanche"
-)
-
 
 def concat_dfs(main_df, new_df):
     new_df.drop_duplicates(inplace=True)
@@ -109,6 +90,24 @@ def time_taken(row):
 
 
 def fetch_txns_df(prep_cut_off):
+    transport_matic = RequestsHTTPTransport(
+        url="https://api.thegraph.com/subgraphs/name/connext/nxtp-matic"
+    )
+    transport_bsc = RequestsHTTPTransport(
+        url="https://api.thegraph.com/subgraphs/name/connext/nxtp-bsc"
+    )
+    transport_xdai = RequestsHTTPTransport(
+        url="https://api.thegraph.com/subgraphs/name/connext/nxtp-xdai"
+    )
+    transport_fantom = RequestsHTTPTransport(
+        url="https://api.thegraph.com/subgraphs/name/connext/nxtp-fantom"
+    )
+    transport_arbitrum = RequestsHTTPTransport(
+        url="https://api.thegraph.com/subgraphs/name/connext/nxtp-arbitrum-one"
+    )
+    transport_avalanche = RequestsHTTPTransport(
+        url="https://api.thegraph.com/subgraphs/name/connext/nxtp-avalanche"
+    )
     matic_txns = pd.DataFrame(columns=txn_columns)
     bsc_txns = pd.DataFrame(columns=txn_columns)
     xdai_txns = pd.DataFrame(columns=txn_columns)
