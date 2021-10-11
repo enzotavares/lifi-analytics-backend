@@ -80,6 +80,8 @@ def get_hop_tvl():
 
     for chain in ["optimism", "arbitrum", "xdai", "mainnet", "polygon"]:
         result = get_liquidity_hop(chain)
+        if chain == "mainnet":
+            chain = "ethereum"
         for tvl in result["data"]["tvls"]:
             amount = tvl["amount"]
             if len(amount) > 18:
