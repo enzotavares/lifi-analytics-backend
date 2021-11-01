@@ -126,6 +126,7 @@ chain_asset_data = {
         "0x2791bca1f2de4661ed88a30c99a7a9449aa84174": {"token": "USDC", "decimals": 6},
         "0xc2132d05d31c914a87c6611c10748aeb04b58e8f": {"token": "USDT", "decimals": 6},
         "0xb32786dc23a6511f88cba528c1e5175c182091b9": {"token": "FAKE", "decimals": 18},
+        "0xabc6790673a60b8a7f588450f59d2d256b1aef7f": {"token": "OAI", "decimals": 18},
     },
     "xDai": {
         "0xa5c7cb68cd81640d40c85b2e5ec9e4bb55be0214": {"token": "ETH", "decimals": 18},
