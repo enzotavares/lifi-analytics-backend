@@ -6,7 +6,7 @@ def get_delta_count(utc_tz, utc_midnight, last_timestamp):
     count = 0
     while True:
         tmstp = int(utc_tz.localize(utc_midnight - timedelta(count)).timestamp())
-        if tmstp > last_timestamp:
+        if tmstp > str(last_timestamp):
             count += 1
         else:
             break

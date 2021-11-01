@@ -33,7 +33,11 @@ def fetch_routers(query, params, transport, dataframe, chain):
             for asset in router["assetBalances"]:
 
                 asset_id = asset["id"].split("-")[0]
-                token = chain_asset_data[chain][asset_id]["token"]
+                try:
+                    token = chain_asset_data[chain][asset_id]["token"]
+                except KeyError:
+                    print(chain, asset_id)
+                    print(1 / 0)
                 decimals = chain_asset_data[chain][asset_id]["decimals"]
                 amount = asset["amount"]
                 tvl = int(amount) / 10 ** decimals
