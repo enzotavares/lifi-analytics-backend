@@ -26,4 +26,5 @@ def get_prep_cut_off(last_timestamp):
     expiry_cut_off = str(
         int(utc_tz.localize(utc_midnight - timedelta(delta_count)).timestamp())
     )
+    print(expiry_cut_off)
     return expiry_cut_off
