@@ -70,6 +70,7 @@ chain_mapping = {
     "4689": "IoTeX",
     "32659": "Fusion",
     "42161": "Arbitrum",
+    "42220": "Celo",
     "43114": "Avalanche",
     "421611": "Arbitrum-Rinkeby",
     "1666600000": "Harmony",
@@ -112,6 +113,7 @@ chain_asset_data = {
         "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d": {"token": "USDC", "decimals": 18},
         "0x55d398326f99059ff775485246999027b3197955": {"token": "USDT", "decimals": 18},
         "0xd9a54933b000d2c2eac81e8db7b294db16a73bfe": {"token": "FAKE", "decimals": 18},
+        "0xabc6790673a60b8a7f588450f59d2d256b1aef7f": {"token": "OMNI", "decimals": 18},
     },
     "Polygon": {
         "0xfd8ee443ab7be5b1522a1c020c097cff1ddc1209": {"token": "ETH", "decimals": 18},
