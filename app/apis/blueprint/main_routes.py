@@ -2,6 +2,7 @@ from datetime import datetime
 from os import RTLD_NOW, cpu_count
 from flask import jsonify
 import pandas as pd
+from sqlalchemy import func
 
 
 from data.tvl import get_combined_tvl
@@ -29,7 +30,8 @@ scheduler = APScheduler()
 def update_db():
     print("Updating database")
     with scheduler.app.app_context():
-        prep_cut_off = get_prep_cut_off()
+        last_timestamp = db.session.query(func.max(Txns.preparedTimestamp)).scalar()
+        prep_cut_off = get_prep_cut_off(last_timestamp)
 
         count = db.session.query(Txns).count()
         if count == 0:
