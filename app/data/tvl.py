@@ -19,6 +19,13 @@ def get_liquidity_anyswap():
     return response.json()
 
 
+def anyswap_chain_mapping(x):
+    try:
+        return chain_mapping[x]
+    except KeyError as e:
+        print("CAUGHT_ERROR: KeyError", e)
+
+
 def get_anyswap_tvl():
     result = get_liquidity_anyswap()
     cols_anyswap = [
@@ -49,8 +56,10 @@ def get_anyswap_tvl():
 
     anyswap_df = structure_anyswap_data(anyswap_df)
     anyswap_df.tvl = anyswap_df.tvl.replace("", 0.0)
-
-    anyswap_df["chain"] = anyswap_df.chainId.apply(lambda x: chain_mapping[x])
+    try:
+        anyswap_df["chain"] = anyswap_df.chainId.apply(anyswap_chain_mapping)
+    except KeyError as e:
+        print("CAUGHT_ERROR: KeyError", e)
     anyswap_df.drop(
         anyswap_df[anyswap_df.chain == "Goerli"].index, axis=0, inplace=True
     )

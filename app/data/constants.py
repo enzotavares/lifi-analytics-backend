@@ -55,6 +55,7 @@ chain_mapping = {
     "5": "Goerli",
     "10": "Optimism",
     "28": "OMGX-Rinkeby",
+    "40": "Telos",
     "56": "BSC",
     "66": "OKExChain",
     "69": "Optimism-Kovan",
