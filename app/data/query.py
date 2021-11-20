@@ -61,10 +61,14 @@ def transacting_chains(row):
 
 def asset_token_mapper(row):
     chain_asset_dict = chain_asset_data[row["chain"]]
-    if row["txn_type"] == "repeat":
-        asset = chain_asset_dict[row["receivingAssetId"]]
-    else:
-        asset = chain_asset_dict[row["sendingAssetId"]]
+    try:
+        if row["txn_type"] == "repeat":
+            asset = chain_asset_dict[row["receivingAssetId"]]
+        else:
+            asset = chain_asset_dict[row["sendingAssetId"]]
+    except KeyError as e:
+        print(row["chain"], ", ", e)
+        print(1 / 0)
     return asset["token"]
 
 
@@ -108,12 +112,20 @@ def fetch_txns_df(prep_cut_off):
     transport_avalanche = RequestsHTTPTransport(
         url="https://api.thegraph.com/subgraphs/name/connext/nxtp-avalanche"
     )
+    transport_optimism = AIOHTTPTransport(
+        url="https://api.thegraph.com/subgraphs/name/connext/nxtp-optimism"
+    )
+    transport_mainnet = AIOHTTPTransport(
+        url="https://api.thegraph.com/subgraphs/name/connext/nxtp-mainnet"
+    )
     matic_txns = pd.DataFrame(columns=txn_columns)
     bsc_txns = pd.DataFrame(columns=txn_columns)
     xdai_txns = pd.DataFrame(columns=txn_columns)
     fantom_txns = pd.DataFrame(columns=txn_columns)
     arbitrum_txns = pd.DataFrame(columns=txn_columns)
     avalanche_txns = pd.DataFrame(columns=txn_columns)
+    optimism_txns = pd.DataFrame(columns=txn_columns)
+    mainnet_txns = pd.DataFrame(columns=txn_columns)
 
     new_df = fetch_chain_transactions(
         txns_query, txns_params, transport_matic, "Polygon", prep_cut_off
@@ -145,15 +157,36 @@ def fetch_txns_df(prep_cut_off):
     )
     avalanche_txns = concat_dfs(avalanche_txns, new_df)
 
+    new_df = fetch_chain_transactions(
+        txns_query, txns_params, transport_optimism, "Optimism", prep_cut_off
+    )
+    optimism_txns = concat_dfs(optimism_txns, new_df)
+
+    new_df = fetch_chain_transactions(
+        txns_query, txns_params, transport_mainnet, "Ethereum", prep_cut_off
+    )
+    mainnet_txns = concat_dfs(mainnet_txns, new_df)
+
     matic_txns["chain"] = "Polygon"
     bsc_txns["chain"] = "BSC"
     xdai_txns["chain"] = "xDai"
     fantom_txns["chain"] = "Fantom"
     arbitrum_txns["chain"] = "Arbitrum"
     avalanche_txns["chain"] = "Avalanche"
+    optimism_txns["chain"] = "Optimism"
+    mainnet_txns["chain"] = "Ethereum"
 
     two_sided_txns = pd.concat(
-        [matic_txns, bsc_txns, xdai_txns, fantom_txns, arbitrum_txns, avalanche_txns]
+        [
+            matic_txns,
+            bsc_txns,
+            xdai_txns,
+            fantom_txns,
+            arbitrum_txns,
+            avalanche_txns,
+            optimism_txns,
+            mainnet_txns,
+        ]
     )
     if two_sided_txns.shape[0] == 0:
         print("No new rows to add")

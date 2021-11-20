@@ -44,13 +44,13 @@ def update_db():
         update_cached_data()
 
 
-@scheduler.task(
-    "interval",
-    id="bridges_tvl",
-    seconds=130,
-    max_instances=1,
-    start_date="2000-01-01 12:19:00",
-)
+# @scheduler.task(
+#     "interval",
+#     id="bridges_tvl",
+#     seconds=130,
+#     max_instances=1,
+#     start_date="2000-01-01 12:19:00",
+# )
 def recurring_bridges_tvl():
     with scheduler.app.app_context():
         print("Updating tvl")
