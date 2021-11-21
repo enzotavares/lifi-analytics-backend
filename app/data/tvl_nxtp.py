@@ -77,6 +77,12 @@ def get_nxtp_tvl():
     transport_avalanche = RequestsHTTPTransport(
         url="https://api.thegraph.com/subgraphs/name/connext/nxtp-avalanche"
     )
+    transport_optimism = RequestsHTTPTransport(
+        url="https://api.thegraph.com/subgraphs/name/connext/nxtp-optimism"
+    )
+    transport_mainnet = RequestsHTTPTransport(
+        url="https://api.thegraph.com/subgraphs/name/connext/nxtp-mainnet"
+    )
 
     router_columns = [
         "router_id",
@@ -94,6 +100,8 @@ def get_nxtp_tvl():
     fantom_routers = pd.DataFrame(columns=router_columns)
     arbitrum_routers = pd.DataFrame(columns=router_columns)
     avalanche_routers = pd.DataFrame(columns=router_columns)
+    optimism_routers = pd.DataFrame(columns=router_columns)
+    mainnet_routers = pd.DataFrame(columns=router_columns)
 
     fetch_routers(query, params, transport_matic, matic_routers, "Polygon")
     fetch_routers(query, params, transport_bsc, bsc_routers, "BSC")
@@ -101,6 +109,8 @@ def get_nxtp_tvl():
     fetch_routers(query, params, transport_fantom, fantom_routers, "Fantom")
     fetch_routers(query, params, transport_arbitrum, arbitrum_routers, "Arbitrum")
     fetch_routers(query, params, transport_avalanche, avalanche_routers, "Avalanche")
+    fetch_routers(query, params, transport_optimism, optimism_routers, "Optimism")
+    fetch_routers(query, params, transport_mainnet, mainnet_routers, "Ethereum")
 
     nxtp_df = pd.concat(
         [
@@ -110,6 +120,8 @@ def get_nxtp_tvl():
             fantom_routers,
             arbitrum_routers,
             avalanche_routers,
+            optimism_routers,
+            mainnet_routers,
         ]
     )
 

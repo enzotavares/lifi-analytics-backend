@@ -112,10 +112,10 @@ def fetch_txns_df(prep_cut_off):
     transport_avalanche = RequestsHTTPTransport(
         url="https://api.thegraph.com/subgraphs/name/connext/nxtp-avalanche"
     )
-    transport_optimism = AIOHTTPTransport(
+    transport_optimism = RequestsHTTPTransport(
         url="https://api.thegraph.com/subgraphs/name/connext/nxtp-optimism"
     )
-    transport_mainnet = AIOHTTPTransport(
+    transport_mainnet = RequestsHTTPTransport(
         url="https://api.thegraph.com/subgraphs/name/connext/nxtp-mainnet"
     )
     matic_txns = pd.DataFrame(columns=txn_columns)
