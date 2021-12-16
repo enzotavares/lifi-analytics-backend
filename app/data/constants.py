@@ -62,6 +62,7 @@ chain_mapping = {
     "69": "Optimism-Kovan",
     "97": "BSC",
     "100": "xDAI",
+    "122": "Fuse",
     "128": "Huobi",
     "137": "Polygon",
     "250": "Fantom",
@@ -104,6 +105,8 @@ chain_asset_data = {
         "0x6b175474e89094c44da98b954eedeac495271d0f": {"token": "DAI", "decimals": 18},
         "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": {"token": "USDC", "decimals": 6},
         "0xdac17f958d2ee523a2206206994597c13d831ec7": {"token": "USDT", "decimals": 6},
+        "0xc944e90c64b2c07662a292be6244bdf05cda44a7": {"token": "GRT", "decimals": 18},
+        "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": {"token": "WBTC", "decimals": 8},
     },
     "BSC": {
         "0x2170ed0880ac9a755fd29b2688956bd959f933f8": {"token": "ETH", "decimals": 18},
@@ -132,6 +135,12 @@ chain_asset_data = {
         "0xabc6790673a60b8a7f588450f59d2d256b1aef7f": {"token": "OAI", "decimals": 18},
         "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619": {"token": "WETH", "decimals": 18},
         "0xc0b2983a17573660053beeed6fdb1053107cf387": {"token": "MIVA", "decimals": 18},
+        "0x5fe2b58c013d7601147dcdd68c143a77499f5531": {"token": "GRT", "decimals": 18},
+        "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6": {"token": "WBTC", "decimals": 8},
+        "0xbd80cfa9d93a87d1bb895f810ea348e496611cd4": {
+            "token": "FRACTION",
+            "decimals": 18,
+        },
     },
     "xDai": {
         "0xa5c7cb68cd81640d40c85b2e5ec9e4bb55be0214": {"token": "ETH", "decimals": 18},
@@ -144,6 +153,10 @@ chain_asset_data = {
         "0xddafbb505ad214d7b80b1f830fccc89b60fb7a83": {"token": "USDC", "decimals": 6},
         "0x4ecaba5870353805a9f068101a40e0f32ed605c6": {"token": "USDT", "decimals": 6},
         "0x63e62989d9eb2d37dfdb1f93a22f063635b07d51": {"token": "MIVA", "decimals": 18},
+        "0x2bf2ba13735160624a0feae98f6ac8f70885ea61": {
+            "token": "FRACTION",
+            "decimals": 18,
+        },
     },
     "Fantom": {
         "0x658b0c7613e890ee50b8c4bc6a3f41ef411208ad": {"token": "ETH", "decimals": 18},
@@ -151,18 +164,28 @@ chain_asset_data = {
         "0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e": {"token": "DAI", "decimals": 18},
         "0x04068da6c83afcfa0e13ba15a6696662335d5b75": {"token": "USDC", "decimals": 6},
         "0x049d68029688eabf473097a2fc38ef61633a3c7a": {"token": "USDT", "decimals": 6},
+        "0x321162cd933e2be498cd2267a90534a804051b11": {"token": "WBTC", "decimals": 8},
     },
     "Arbitrum": {
         "0x0000000000000000000000000000000000000000": {"token": "ETH", "decimals": 18},
         "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8": {"token": "USDC", "decimals": 6},
         "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9": {"token": "USDT", "decimals": 6},
         "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1": {"token": "DAI", "decimals": 18},
+        "0x23a941036ae778ac51ab04cea08ed6e2fe103614": {
+            "token": "GRT",
+            "decimals": 18,
+        },
+        "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f": {
+            "token": "WBTC",
+            "decimals": 8,
+        },
     },
     "Avalanche": {
         "0xa7d7079b0fead91f3e65f86e8915cb59c1a4c664": {"token": "USDC", "decimals": 6},
         "0xc7198437980c041c805a1edcba50c1ce5db95118": {"token": "USDT", "decimals": 6},
         "0xd586e7f844cea2f87f50152665bcbc2c279d8d70": {"token": "DAI", "decimals": 18},
         "0x49d5c2bdffac6ce2bfdb6640f4f80f226bc10bab": {"token": "WETH", "decimals": 18},
+        "0x50b7545627a5162f82a992c33b87adc75187b218": {"token": "WBTC", "decimals": 8},
     },
     "Optimism": {
         "0x0000000000000000000000000000000000000000": {"token": "ETH", "decimals": 18},

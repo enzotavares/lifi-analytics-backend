@@ -68,7 +68,6 @@ def asset_token_mapper(row):
             asset = chain_asset_dict[row["sendingAssetId"]]
     except KeyError as e:
         print(row["chain"], ", ", e)
-        print(1 / 0)
     return asset["token"]
 
 
@@ -203,6 +202,9 @@ def fetch_txns_df(prep_cut_off):
     two_sided_txns["dollar_amount"] = two_sided_txns.apply(dollar_amount, axis=1)
     two_sided_txns = two_sided_txns.drop(
         two_sided_txns[two_sided_txns.asset_token == "FAKE"].index, axis=0
+    )
+    two_sided_txns = two_sided_txns.drop(
+        two_sided_txns[two_sided_txns.asset_token == "FRACTION"].index, axis=0
     )
 
     two_sided_txns["time_prepared"] = two_sided_txns["preparedTimestamp"].apply(
